@@ -17,7 +17,7 @@ Item {
         id: sceneMouseArea
         anchors.fill: parent
 
-        cursorShape: Qt.OpenHandCursor
+        acceptedButtons: Qt.AllButtons
 
         // Position of the mouse on press.
         property point clickPosition: Qt.point(0, 0)
@@ -28,32 +28,39 @@ Item {
             nodeContainer.selection();
             nodeContainer.selectedNode = null;
 
-            cursorShape = Qt.ClosedHandCursor;
-            clickPosition = Qt.point(mouse.x, mouse.y);
+            if (mouse.button === Qt.MiddleButton) {
+                nodeContainer.enabled = false;
+                cursorShape = Qt.SizeAllCursor;
+                clickPosition = Qt.point(mouse.x, mouse.y);
+            }
         }
 
         // Release the mouse button.
-        onReleased: {
-            cursorShape = Qt.OpenHandCursor;
-
-            clickPosition = Qt.point(0, 0);
-            previousDelta = Qt.point(0, 0);
+        onReleased: mouse => {
+            if (mouse.button === Qt.MiddleButton) {
+                nodeContainer.enabled = true;
+                cursorShape = Qt.ArrowCursor;
+                clickPosition = Qt.point(0, 0);
+                previousDelta = Qt.point(0, 0);
+            }
         }
 
         // Moving the mouse while it is pressed.
         onPositionChanged: mouse => {
-            var dx = mouse.x - clickPosition.x;
-            var dy = mouse.y - clickPosition.y;
+            if (mouse.button === Qt.MiddleButton) {
+                var dx = mouse.x - clickPosition.x;
+                var dy = mouse.y - clickPosition.y;
 
-            var xIncrPos = dx - previousDelta.x;
-            var yIncrPos = dy - previousDelta.y;
+                var xIncrPos = dx - previousDelta.x;
+                var yIncrPos = dy - previousDelta.y;
 
-            console.log(xIncrPos, yIncrPos);
+                console.log(xIncrPos, yIncrPos);
 
-            sceneBackground.xOrigin = sceneBackground.xOrigin + xIncrPos;
-            sceneBackground.yOrigin = sceneBackground.yOrigin + yIncrPos;
+                sceneBackground.xOrigin = sceneBackground.xOrigin + xIncrPos;
+                sceneBackground.yOrigin = sceneBackground.yOrigin + yIncrPos;
 
-            previousDelta = Qt.point(dx, dy);
+                previousDelta = Qt.point(dx, dy);
+            }
         }
 
         // Scrolling.
