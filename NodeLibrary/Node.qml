@@ -3,6 +3,8 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQml.Models 2.15
 
+import QtQuick.Shapes 1.15
+
 import "Widgets"
 import "Widgets/Base"
 
@@ -22,11 +24,11 @@ Item {
         // Private properties
         id: internal
 
-        property color selectedBorderColor: Qt.rgba(0.8, 0.8, 0.8, 1)
-        property color selectedColor: Qt.rgba(0.5, 0.5, 0.5, 0.95)
+        property color selectedBorderColor: Qt.rgba(0.5, 0.5, 0.5, 1)
+        property color selectedColor: Qt.rgba(0.35, 0.35, 0.35, 1)
 
         property color unselectedBorderColor: nodeCaptionBackground.color.darker(1.1)
-        property color unselectedColor: Qt.rgba(0.3, 0.3, 0.3, 0.85)
+        property color unselectedColor: Qt.rgba(0.3, 0.3, 0.3, 1)
     }
 
     onSelectedChanged: {
@@ -49,11 +51,14 @@ Item {
         id: nodeShape
         anchors.fill: parent
 
-        color: internal.unselectedColor
         radius: 3
-
         border.width: 1
         border.color: internal.unselectedBorderColor
+
+        gradient: Gradient {
+            GradientStop { position: 1.0; color: nodeRoot.captionColor.darker(2.2); }
+            GradientStop { position: 0.5; color: selected ? internal.selectedColor : internal.unselectedColor; }
+        }
 
         // Node caption.
         Rectangle

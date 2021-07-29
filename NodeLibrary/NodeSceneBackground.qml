@@ -4,25 +4,23 @@ Rectangle {
     id: backgroundRoot
     anchors.fill: parent
 
-    property int xOrigin
-    property int yOrigin
+    property real xOrigin: 1
+    property real yOrigin: 1
     property color linesColor: "#000"
     property real scaleFactor: 1
 
-    onScaleFactorChanged: {
-        var wholeBackgroundRect = Qt.rect(x, y, width, height);
-        gridDrawer.clear();
-        gridDrawer.markDirty(wholeBackgroundRect);
-    }
+    onScaleFactorChanged: gridDrawer.redraw()
 
     Canvas {
         id: gridDrawer
         anchors.fill: parent
+        renderStrategy : Canvas.Cooperative
+        renderTarget: Canvas.FramebufferObject
 
         onPaint: {
             var ctx = getContext("2d");
-            drawGrid(ctx, 15, 1);
-            drawGrid(ctx, 150, 2);
+            drawGrid(ctx, 20, 1);
+            drawGrid(ctx, 200, 2);
         }
 
         /**
@@ -42,17 +40,17 @@ Rectangle {
             // Draw the horizontal lines.
             var amountRows = (height / stepScaled) + 1;
             for (var row = 0; row < amountRows; ++row) {
-                var xLine = stepScaled * row ;
-                ctx.moveTo(0, xLine);
-                ctx.lineTo(width, xLine);
+                var yLine = (stepScaled * row) ;
+                ctx.moveTo(0, yLine);
+                ctx.lineTo(width, yLine);
             }
 
             // Draw the vertical lines.
             var amountColumns = (width / stepScaled) + 1;
             for (var col = 0; col < amountColumns; ++col) {
-                var yLine = stepScaled * col ;
-                ctx.moveTo(yLine, 0);
-                ctx.lineTo(yLine, height);
+                var xLine = (stepScaled * col) ;
+                ctx.moveTo(xLine, 0);
+                ctx.lineTo(xLine, height);
             }
 
             ctx.closePath();
@@ -65,6 +63,14 @@ Rectangle {
         function clear() {
             var ctx = getContext("2d");
             ctx.reset();
+        }
+
+        /**
+         * Redraw the whole canvas.
+         */
+        function redraw() {
+            gridDrawer.clear();
+            gridDrawer.requestPaint();
         }
     }
 }

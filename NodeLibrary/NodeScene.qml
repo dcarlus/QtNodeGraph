@@ -17,6 +17,46 @@ Item {
         id: sceneMouseArea
         anchors.fill: parent
 
+        cursorShape: Qt.OpenHandCursor
+
+        // Position of the mouse on press.
+        property point clickPosition: Qt.point(0, 0)
+        property point previousDelta: Qt.point(0, 0)
+
+        // Press a mouse button.
+        onPressed: mouse => {
+            nodeContainer.selection();
+            nodeContainer.selectedNode = null;
+
+            cursorShape = Qt.ClosedHandCursor;
+            clickPosition = Qt.point(mouse.x, mouse.y);
+        }
+
+        // Release the mouse button.
+        onReleased: {
+            cursorShape = Qt.OpenHandCursor;
+
+            clickPosition = Qt.point(0, 0);
+            previousDelta = Qt.point(0, 0);
+        }
+
+        // Moving the mouse while it is pressed.
+        onPositionChanged: mouse => {
+            var dx = mouse.x - clickPosition.x;
+            var dy = mouse.y - clickPosition.y;
+
+            var xIncrPos = dx - previousDelta.x;
+            var yIncrPos = dy - previousDelta.y;
+
+            console.log(xIncrPos, yIncrPos);
+
+            sceneBackground.xOrigin = sceneBackground.xOrigin + xIncrPos;
+            sceneBackground.yOrigin = sceneBackground.yOrigin + yIncrPos;
+
+            previousDelta = Qt.point(dx, dy);
+        }
+
+        // Scrolling.
         onWheel: (wheel) => {
             if ((wheel.angleDelta.y > 0) && (nodeContainerTransform.xScale < 2.)) {
                 nodeContainerTransform.xScale += 0.1;
@@ -27,11 +67,6 @@ Item {
 
             nodeContainerTransform.yScale = nodeContainerTransform.xScale;
             sceneBackground.scaleFactor = nodeContainerTransform.xScale;
-        }
-
-        onPressed: {
-            nodeContainer.selection();
-            nodeContainer.selectedNode = null;
         }
     }
 
