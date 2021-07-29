@@ -1,8 +1,10 @@
 # QtNodeGraph
 Application test to develop a Node Graph library (to be extracted into a Qt library).
 
-Written in C++/QML/JavaScript using Qt 6.1.
+Written in C++/QML/JavaScript using Qt 6.1.<br/>
 Development done on Window 10 for now, other systems not tested yet.
+
+![Screenshot](doc/img/example.png)
 
 ## What's done?
 - Graphics only (QML/JavaScript)

@@ -57,7 +57,7 @@ Item {
 
         Node {
             id: stepNode
-            caption: "A step to do something"
+            caption: "A node to do something"
             captionColor: Qt.rgba(0.4, 0.7, 0.1)
 
             x: 200
@@ -66,7 +66,7 @@ Item {
 
         Node {
             id: actionNode
-            caption: "Action to be linked to a button"
+            caption: "Node to be linked to another one"
             captionColor: Qt.rgba(0.8, 0.2, 0.1)
 
             x: 30
@@ -75,7 +75,7 @@ Item {
 
         Node {
             id: userInputNode
-            caption: "A value that the user enter"
+            caption: "Another node with an elided title to show it works"
             captionColor: Qt.rgba(0.2, 0.5, 0.9)
 
             x: 150
