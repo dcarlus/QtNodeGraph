@@ -2,8 +2,15 @@ import QtQuick 2.0
 import QtQuick.Controls 2.15
 
 Item {
-    id: nodeSceneRoot
+    id: sceneRoot
     anchors.fill: parent
+
+    // Draw the background.
+    NodeSceneBackground {
+        id: sceneBackground
+        color: "#555"
+        linesColor: "#444"
+    }
 
     // Scene interactions.
     MouseArea {
@@ -19,6 +26,7 @@ Item {
             }
 
             nodeContainerTransform.yScale = nodeContainerTransform.xScale;
+            sceneBackground.scaleFactor = nodeContainerTransform.xScale;
         }
 
         onPressed: {

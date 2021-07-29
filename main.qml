@@ -9,8 +9,6 @@ Window {
     width: 640
     height: 480
 
-    color: "darkgray"
-
     NodeScene {
         id: nodeScene
     }
