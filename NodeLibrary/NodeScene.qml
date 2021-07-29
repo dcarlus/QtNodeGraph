@@ -10,8 +10,6 @@ Item {
         id: sceneMouseArea
         anchors.fill: parent
 
-        property real mouseOffset: 0.
-
         onWheel: (wheel) => {
             if ((wheel.angleDelta.y > 0) && (nodeContainerTransform.xScale < 2.)) {
                 nodeContainerTransform.xScale += 0.1;
