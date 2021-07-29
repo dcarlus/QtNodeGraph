@@ -107,7 +107,7 @@ Item {
 
             columns: 1
             rows: 4
-            rowSpacing: 8
+            rowSpacing: 6
 
             anchors.top: nodeCaptionBackground.bottom
             anchors.bottom: nodeShape.bottom
@@ -140,10 +140,10 @@ Item {
                 widgetSource: '../Content/ComboBoxNodeWidget.qml'
                 widgetModel: ListModel {
                     id: pokemonModel
-                    ListElement { text: "Evoli" }
-                    ListElement { text: "Carapuce" }
-                    ListElement { text: "Germignon" }
                     ListElement { text: "Pikachu" }
+                    ListElement { text: "Squirtle" }
+                    ListElement { text: "Chikorita" }
+                    ListElement { text: "Eevee" }
                 }
             }
 
@@ -158,9 +158,9 @@ Item {
                 widgetSource: '../Content/ComboBoxNodeWidget.qml'
                 widgetModel: ListModel {
                     id: dogModel
-                    ListElement { text: "Shiba" }
-                    ListElement { text: "Bichon" }
-                    ListElement { text: "Caniche" }
+                    ListElement { text: "Shiba Inu" }
+                    ListElement { text: "Maltezer" }
+                    ListElement { text: "Poodle" }
                     ListElement { text: "Bulldog" }
                     ListElement { text: "Yorkshire" }
                 }

@@ -18,16 +18,19 @@ Item {
 
     GridLayout {
         columns: 2
+        columnSpacing: 10
         anchors.fill: parent
 
         Port {
             id: inputPort
+            Layout.margins: -10
         }
 
         Item {
             id: widgetContainer
             Layout.fillHeight: true
             Layout.fillWidth: true
+            Layout.rightMargin: 10
         }
     }
 

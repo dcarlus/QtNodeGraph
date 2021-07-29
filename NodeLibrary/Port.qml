@@ -8,5 +8,5 @@ Rectangle {
     radius: width
 
     border.width: 1
-    border.color: Qt.rgba(0,0,0,1)
+    border.color: color.darker(2)
 }

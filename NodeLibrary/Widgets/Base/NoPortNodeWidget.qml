@@ -5,30 +5,6 @@ import QtQuick.Layouts 1.15
 import "../../../NodeLibrary"
 import "../Content"
 
-// Widget without any connection to other nodes.
-// How to use (example):
-/*
-    NoPortNodeWidget {
-        id: renderEngineSelectWidget
-        widgetSource: '../Content/ComboBoxNodeWidget.qml'
-        parentLayout: myLayout
-
-        property var model: ListModel {
-            id: renderEngineModel
-            ListElement { text: "EEVEE" }
-            ListElement { text: "Cycles" }
-            ListElement { text: "All" }
-        }
-
-        onWidgetChanged: {
-            if (widget === null) {
-                return;
-            }
-
-            widget.model = model;
-        }
-    }
-*/
 Item {
     id: widgetRoot
     Layout.fillWidth: true
@@ -42,12 +18,15 @@ Item {
 
     GridLayout {
         columns: 1
+        columnSpacing: 10
         anchors.fill: parent
 
         Item {
             id: widgetContainer
             Layout.fillHeight: true
             Layout.fillWidth: true
+
+            Layout.leftMargin: 10
             Layout.rightMargin: Layout.leftMargin
         }
     }
