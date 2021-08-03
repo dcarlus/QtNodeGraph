@@ -1,21 +1,50 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.15
+import QtQuick.Shapes 1.1
 
 Item {
     id: sceneRoot
     anchors.fill: parent
 
-    // Draw the background.
-    NodeSceneBackground {
+    Component.onCompleted: centerOnContent();
+
+    function centerOnContent() {
+        nodesContainer.computeBoundingBox();
+
+        var sceneWidth = width;
+        var sceneHeight = height;
+        var sceneCenter = Qt.point(width / 2, height / 2);
+
+        var contentTopLeft = nodesContainer.bboxTopLeft;
+        var contentBottomRight = nodesContainer.bboxBottomRight;
+        var contentWidth = contentBottomRight.x - contentTopLeft.x;
+        var contentHeight = contentBottomRight.y - contentTopLeft.y;
+
+        var dX = sceneCenter.x - contentWidth;
+        var dY = sceneCenter.y - contentHeight;
+
+        nodesContainer.x = dX;
+        nodesContainer.y = dY;
+    }
+
+    Rectangle {
         id: sceneBackground
-        color: "#555"
-        linesColor: "#444"
+        anchors.fill: parent
+
+        gradient: Gradient {
+            GradientStop { position: 0; color: "#566267" }
+            GradientStop { position: 0.5; color: "#4a515a" }
+            GradientStop { position: 1.; color: "#3f4349" }
+        }
     }
 
     // Scene interactions.
     MouseArea {
         id: sceneMouseArea
         anchors.fill: parent
+
+        drag.target: nodesContainer
+        drag.axis: Drag.XAndYAxis
 
         acceptedButtons: Qt.AllButtons
 
@@ -25,11 +54,11 @@ Item {
 
         // Press a mouse button.
         onPressed: mouse => {
-            nodeContainer.selection();
-            nodeContainer.selectedNode = null;
+            nodesContainer.selection();
+            nodesContainer.selectedNode = null;
 
             if (mouse.button === Qt.MiddleButton) {
-                nodeContainer.enabled = false;
+                nodesContainer.enabled = false;
                 cursorShape = Qt.SizeAllCursor;
                 clickPosition = Qt.point(mouse.x, mouse.y);
             }
@@ -38,7 +67,7 @@ Item {
         // Release the mouse button.
         onReleased: mouse => {
             if (mouse.button === Qt.MiddleButton) {
-                nodeContainer.enabled = true;
+                nodesContainer.enabled = true;
                 cursorShape = Qt.ArrowCursor;
                 clickPosition = Qt.point(0, 0);
                 previousDelta = Qt.point(0, 0);
@@ -54,12 +83,7 @@ Item {
                 var xIncrPos = dx - previousDelta.x;
                 var yIncrPos = dy - previousDelta.y;
 
-                console.log(xIncrPos, yIncrPos);
-
-                sceneBackground.xOrigin = sceneBackground.xOrigin + xIncrPos;
-                sceneBackground.yOrigin = sceneBackground.yOrigin + yIncrPos;
-
-                previousDelta = Qt.point(dx, dy);
+                nodesContainer.pan(dx, dy);
             }
         }
 
@@ -73,17 +97,26 @@ Item {
             }
 
             nodeContainerTransform.yScale = nodeContainerTransform.xScale;
-            sceneBackground.scaleFactor = nodeContainerTransform.xScale;
         }
     }
 
     // Scene content.
     Item {
-        id: nodeContainer
-        anchors.fill: parent
+        id: nodesContainer
+        x: parent.x
+        y: parent.y
+        width: parent.width
+        height: parent.height
 
+        property var bboxTopLeft: Qt.point(0,0)
+        property var bboxBottomRight: Qt.point(0,0)
         property Node selectedNode
 
+        Component.onCompleted: computeBoundingBox();
+
+        ///
+        /// @brief  Process the selection of node.
+        ///
         function selection() {
             if (selectedNode != null) {
                 selectedNode.selected = false;
@@ -99,6 +132,42 @@ Item {
                     }
                 }
             }
+        }
+
+        ///
+        /// @brief  Compute the bounding box of the node container.
+        ///
+        function computeBoundingBox() {
+            bboxTopLeft = Qt.point(Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER);
+            bboxBottomRight = Qt.point(0, 0);
+
+            var amountNodes = children.length;
+
+            for (var nodeIndex = 0; nodeIndex < amountNodes; ++nodeIndex) {
+                var node = children[nodeIndex];
+
+                var mappedTopLeft = mapToItem(sceneRoot, node.x, node.y);
+                var mappedBottomRight = mapToItem(sceneRoot, node.x + node.width, node.y + node.height);
+
+                // Node corner positions.
+                var nodeTopLeftX = mappedTopLeft.x;
+                var nodeTopLeftY = mappedTopLeft.y;
+                var nodeBottomRightX = mappedBottomRight.x;
+                var nodeBottomRightY = mappedBottomRight.y;
+
+                var bboxTopLeftX = (nodeTopLeftX < bboxTopLeft.x) ? nodeTopLeftX : bboxTopLeft.x;
+                var bboxTopLeftY = (nodeTopLeftY < bboxTopLeft.y) ? nodeTopLeftY : bboxTopLeft.y;
+                var bboxBottomRightX = (nodeTopLeftX > bboxBottomRight.x) ? nodeTopLeftX : bboxBottomRight.x;
+                var bboxBottomRightY = (nodeTopLeftY > bboxBottomRight.y) ? nodeTopLeftY : bboxBottomRight.y;
+
+                bboxTopLeft = Qt.point(bboxTopLeftX, bboxTopLeftY);
+                bboxBottomRight = Qt.point(bboxBottomRightX, bboxBottomRightY);
+            }
+        }
+
+        function pan(panX, panY) {
+            x += panX
+            y += panY
         }
 
         transform: Scale {
@@ -131,5 +200,10 @@ Item {
             x: 150
             y: 150
         }
+    }
+
+    Item {
+        id: connectionsContainer
+        anchors.fill: parent
     }
 }

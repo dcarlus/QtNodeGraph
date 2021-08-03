@@ -2,7 +2,6 @@ import QtQuick 2.0
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQml.Models 2.15
-
 import QtQuick.Shapes 1.15
 
 import "Widgets"
@@ -104,6 +103,10 @@ Item {
                 else {
                     selected = false;
                 }
+            }
+
+            onReleased: {
+                nodeRoot.parent.computeBoundingBox();
             }
         }
 

@@ -9,4 +9,9 @@ Rectangle {
 
     border.width: 1
     border.color: color.darker(2)
+
+    MouseArea {
+        id: portMouseArea
+        anchors.fill: parent
+    }
 }

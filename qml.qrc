@@ -10,6 +10,5 @@
         <file>NodeLibrary/Widgets/Content/ComboBoxNodeWidget.qml</file>
         <file>NodeLibrary/Widgets/Base/NoPortNodeWidget.qml</file>
         <file>NodeLibrary/Widgets/Base/DynamicWidgetLoader.qml</file>
-        <file>NodeLibrary/NodeSceneBackground.qml</file>
     </qresource>
 </RCC>
