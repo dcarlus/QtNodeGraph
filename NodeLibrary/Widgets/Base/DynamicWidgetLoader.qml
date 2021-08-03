@@ -16,7 +16,7 @@ Item {
     Component.onCompleted: createWidget()
 
     onWidgetChanged: {
-        if (widget === null || widgetModel === null) {
+        if (widget === null || widgetModel === null || widgetModel === undefined) {
             return;
         }
 

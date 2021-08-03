@@ -9,7 +9,6 @@ import "Widgets/Base"
 
 Item {
     id: nodeRoot
-    clip: false
 
     width: 200
     height: nodeCaptionBackground.height + nodeContentLayout.implicitHeight + (nodeContentLayout.anchors.margins * 2)
@@ -124,6 +123,17 @@ Item {
 
             anchors.margins: 5
 
+            InputNodeWidget {
+                id: testLabelInputWidget
+
+                parentLayout: nodeContentLayout
+
+                inputPortColor: "#85ae21";
+
+                widgetSource: '../Content/LabelNodeWidget.qml'
+                widgetModel: "BSDF"
+            }
+
             NoPortNodeWidget {
                 id: renderEngineSelectWidget
 
@@ -178,8 +188,6 @@ Item {
                 id: testOutputWidget
 
                 parentLayout: nodeContentLayout
-
-                outputPortColor: "#aaee41";
 
                 widgetSource: '../Content/ComboBoxNodeWidget.qml'
                 widgetModel: ListModel {
